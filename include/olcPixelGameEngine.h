@@ -1030,11 +1030,11 @@ namespace olc
 	};
 
 
-	class ISAMIV_ImageLoader
+	class ImageLoader
 	{
 	public:
-		ISAMIV_ImageLoader() = default;
-		virtual ~ISAMIV_ImageLoader() = default;
+		ImageLoader() = default;
+		virtual ~ImageLoader() = default;
 		virtual olc::rcode LoadImageResource(olc::Sprite* spr, const std::string& sImageFile, olc::ResourcePack* pack) = 0;
 		virtual olc::rcode SaveImageResource(olc::Sprite* spr, const std::string& sImageFile) = 0;
 	};
@@ -1079,7 +1079,7 @@ namespace olc
 		std::vector<olc::Pixel> pColData;
 		Mode modeSample = Mode::NORMAL;
 
-		static std::unique_ptr<olc::ISAMIV_ImageLoader> loader;
+		static std::unique_ptr<olc::ImageLoader> loader;
 	};
 
 	// O------------------------------------------------------------------------------O
@@ -4571,7 +4571,7 @@ namespace olc
 	olc::PixelGameEngine* olc::PGEX::pge = nullptr;
 	olc::PixelGameEngine* olc::Platform::ptrPGE = nullptr;
 	olc::PixelGameEngine* olc::Renderer::ptrPGE = nullptr;
-	std::unique_ptr<ISAMIV_ImageLoader> olc::Sprite::loader = nullptr;
+	std::unique_ptr<ImageLoader> olc::Sprite::loader = nullptr;
 };
 #pragma endregion 
 
@@ -5744,10 +5744,10 @@ namespace olc
 		((std::istream*)a)->read((char*)data, length);
 	}
 
-	class ImageLoader_LibPNG : public olc::ISAMIV_ImageLoader
+	class ImageLoader_LibPNG : public olc::ImageLoader
 	{
 	public:
-		ImageLoader_LibPNG() : ISAMIV_ImageLoader()
+		ImageLoader_LibPNG() : ImageLoader()
 		{}
 
 		olc::rcode LoadImageResource(olc::Sprite* spr, const std::string& sImageFile, olc::ResourcePack* pack) override
