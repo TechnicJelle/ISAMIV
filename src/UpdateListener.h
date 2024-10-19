@@ -1,0 +1,22 @@
+#pragma once
+
+#include <efsw/efsw.hpp>
+
+class ISAMIV_Application;
+
+class UpdateListener : public efsw::FileWatchListener {
+
+private:
+	const std::string& _filepath;
+	ISAMIV_Application& _app;
+
+public:
+	UpdateListener(const std::string& filepath, ISAMIV_Application& app)
+			: _filepath(filepath), _app(app) {}
+
+private:
+	void handleFileAction(efsw::WatchID watchId, const std::string& dir,
+						  const std::string& filename, efsw::Action action,
+						  std::string oldFilename) override;
+
+};

@@ -1,5 +1,4 @@
-# require version 3.10 or higher
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.28)
 
 #
 # Project
@@ -9,7 +8,7 @@ cmake_minimum_required(VERSION 3.10)
 project(ISAMIV)
 
 # Options you can set via command-line
-option(HAS_TERMINAL "Show a terminal window for STDOUT/STDERR" ON)
+option(HAS_TERMINAL "Show a terminal window for STDOUT/STDERR" OFF)
 
 #
 # C_CXX_SOURCES_DIR
@@ -83,36 +82,12 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 add_executable(${OutputExecutable} ${SOURCE_CXX_FILES})
 
 ######################################################################
-# MacOS
-######################################################################
+# Other dependencies
 
-
-if (APPLE)
-
-	# OpenGL
-	set(OpenGL_GL_PREFERENCE LEGACY)
-	find_package(OpenGL REQUIRED)
-	include_directories(${OpenGL_INCLUDE_DIRS})
-	target_link_libraries(${OutputExecutable} ${OpenGL_LIBRARIES} OpenGL::GL)
-
-	# Carbon
-	FIND_LIBRARY(CARBON_LIBRARY Carbon)
-	target_link_libraries(${OutputExecutable} ${CARBON_LIBRARY})
-
-	# GLUT
-	find_package(GLUT REQUIRED)
-	target_link_libraries(${OutputExecutable} ${GLUT_LIBRARIES})
-
-	# Threads
-	find_package(Threads REQUIRED)
-	target_link_libraries(${OutputExecutable} Threads::Threads)
-	include_directories(${Threads_INCLUDE_DIRS})
-
-	find_package(PNG REQUIRED)
-	target_link_libraries(${OutputExecutable} PNG::PNG)
-	include_directories(${PNG_INCLUDE_DIRS})
-
-endif () # APPLE
+# efsw (Entropia File System Watcher)
+add_subdirectory(deps/efsw)
+include_directories(deps/efsw/include)
+target_link_libraries(${OutputExecutable} efsw)
 
 ######################################################################
 # Windows: MinGW
@@ -225,40 +200,6 @@ if (UNIX AND NOT APPLE AND NOT EMSCRIPTEN)
 endif () # Linux
 
 ######################################################################
-# Emscripten
-######################################################################
-if (EMSCRIPTEN)
-
-	# Generate an HTML file
-	set(CMAKE_EXECUTABLE_SUFFIX .html)
-
-	# Build Cache: SDL2_mixer, libpng, zlib
-	execute_process(COMMAND "${EMSCRIPTEN_ROOT_PATH}/embuilder${EMCC_SUFFIX}" build sdl2_mixer libpng zlib)
-
-	if (EXISTS "${SOURCE_DATA_DIR}" AND IS_DIRECTORY "${SOURCE_DATA_DIR}")
-		target_link_options(
-				${OutputExecutable}
-				PRIVATE
-				-sALLOW_MEMORY_GROWTH=1
-				-sMAX_WEBGL_VERSION=2
-				-sMIN_WEBGL_VERSION=2
-				-sUSE_LIBPNG=1
-				-sLLD_REPORT_UNDEFINED
-				--preload-file ${SOURCE_DATA_DIR}@assets)
-	else ()
-		target_link_options(
-				${OutputExecutable}
-				PRIVATE
-				-sALLOW_MEMORY_GROWTH=1
-				-sMAX_WEBGL_VERSION=2
-				-sMIN_WEBGL_VERSION=2
-				-sUSE_LIBPNG=1
-				-sLLD_REPORT_UNDEFINED)
-	endif ()
-
-endif () # Emscripten
-
-######################################################################
 # Set include directory
 ######################################################################
 if (IS_DIRECTORY ${SOURCE_CXX_INCLUDE_DIR})
@@ -283,7 +224,5 @@ endforeach ()
 
 add_custom_target(copy_data DEPENDS ${out_data_files})
 
-# Copy Asset Files, if not Emscripten
-if (NOT EMSCRIPTEN)
-	add_dependencies(${OutputExecutable} copy_data)
-endif ()
+# Copy Asset Files
+add_dependencies(${OutputExecutable} copy_data)
