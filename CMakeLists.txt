@@ -8,7 +8,7 @@ cmake_minimum_required(VERSION 3.28)
 project(ISAMIV)
 
 # Options you can set via command-line
-option(HAS_TERMINAL "Show a terminal window for STDOUT/STDERR" OFF)
+option(HAS_TERMINAL "Show a terminal window for STDOUT/STDERR" ON)
 
 #
 # C_CXX_SOURCES_DIR
