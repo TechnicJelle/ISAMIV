@@ -7,9 +7,9 @@ olc::Renderable ISAMIV_StbLoader::LoadImage(const std::filesystem::path& filepat
 	int width, height;
 	unsigned char* data;
 
-	data = stbi_load(filepath.c_str(), &width, &height, nullptr, channels);
+	data = stbi_load(filepath.string().c_str(), &width, &height, nullptr, channels);
 	if (data == nullptr) {
-		printf("stbi error (%s): %s\n", filepath.c_str(), stbi_failure_reason());
+		printf("stbi error (%s): %s\n", filepath.string().c_str(), stbi_failure_reason());
 		return olc::Renderable();
 	}
 //	printf("Size: %d x %d\n", width, height);
