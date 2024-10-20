@@ -16,6 +16,14 @@ bool ISAMIV_Application::OnUserUpdate(float fElapsedTime) {
 	if (GetKey(olc::R).bPressed)
 		image.MarkForReload();
 
+	if (GetKey(olc::F).bPressed) {
+		ClearFileWatcher();
+		const std::string newImagePath = "/home/technicjelle/Downloads/control_panel.png";
+		image = OpenImage(newImagePath);
+		image.LoadImage();
+		image.SetupFileWatcher(fileWatcher);
+	}
+
 	Clear(olc::MAGENTA);
 
 	transformedView.DrawDecal({0, 0}, image.GetRenderable().Decal());
@@ -28,8 +36,6 @@ bool ISAMIV_Application::OnUserUpdate(float fElapsedTime) {
 }
 
 bool ISAMIV_Application::OnUserDestroy() {
-	for (const std::string& directory : fileWatcher.directories()) {
-		fileWatcher.removeWatch(directory);
-	}
+	ClearFileWatcher();
 	return true;
 }

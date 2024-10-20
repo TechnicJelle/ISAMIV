@@ -4,6 +4,11 @@
 
 OpenImage::OpenImage(std::filesystem::path filepath)
 	: _filepath(std::move(filepath)), _listener(this) {
+	printf("OpenImage constructor %s\n", _filepath.c_str());
+}
+
+OpenImage::~OpenImage() {
+	printf("OpenImage destructor %s\n", _filepath.c_str());
 }
 
 void OpenImage::LoadImage() {

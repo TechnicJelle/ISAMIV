@@ -18,6 +18,17 @@ public:
 		sAppName = "ISAMIV";
 	}
 
+private:
+	void ClearFileWatcher() {
+		//TODO: Only remove the watch if the directory of the new Open Image is different from the previous one
+
+		// fileWatcher.removeWatch(image.GetFilepath().parent_path().string());
+		for (const std::string& directory : fileWatcher.directories()) {
+			printf("Removing watch on %s\n", directory.c_str());
+			fileWatcher.removeWatch(directory);
+		}
+	}
+
 public:
 	bool OnUserCreate() override;
 
