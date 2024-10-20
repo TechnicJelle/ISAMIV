@@ -17,10 +17,9 @@ void ISAMIV_Application::SetupFileWatcher() {
 
 	std::filesystem::path path = filepath;
 	std::filesystem::path parentDir = path.parent_path();
-	std::string parentStr = parentDir.string();
-	printf("Watching folder for changes: %s\n", parentStr.c_str());
+	printf("Watching folder for changes: %s\n", parentDir.c_str());
 
-	efsw::WatchID watchID = fileWatcher.addWatch(parentStr, listener, true);
+	efsw::WatchID watchID = fileWatcher.addWatch(parentDir, listener, true);
 	if (watchID < 0) {
 		printf("Error adding watch! Watch ID: %ld\n", watchID);
 		return;

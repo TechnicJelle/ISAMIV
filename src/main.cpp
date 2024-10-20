@@ -1,7 +1,7 @@
 #include "Application.h"
 
 int main(int argc, char* argv[]) {
-	std::string filepath;
+	std::filesystem::path filepath;
 	if (argc > 1) {
 		filepath = argv[1];
 		printf("File: %s\n", filepath.c_str());

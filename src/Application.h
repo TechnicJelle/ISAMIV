@@ -9,7 +9,7 @@
 class ISAMIV_Application : public olc::PixelGameEngine {
 
 private:
-	std::string filepath;
+	std::filesystem::path filepath;
 	olc::Renderable img;
 	olc::TransformedView transformedView;
 	ISAMIV_StbLoader loader;
@@ -20,7 +20,7 @@ private:
 	UpdateListener* listener = nullptr;
 
 public:
-	explicit ISAMIV_Application(std::string filepath) : filepath(std::move(filepath)) {
+	explicit ISAMIV_Application(std::filesystem::path filepath) : filepath(std::move(filepath)) {
 		sAppName = "ISAMIV";
 	}
 

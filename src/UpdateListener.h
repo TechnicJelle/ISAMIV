@@ -7,11 +7,11 @@ class ISAMIV_Application;
 class UpdateListener : public efsw::FileWatchListener {
 
 private:
-	const std::string& _filepath;
+	const std::filesystem::path& _filepath;
 	ISAMIV_Application& _app;
 
 public:
-	UpdateListener(const std::string& filepath, ISAMIV_Application& app)
+	UpdateListener(const std::filesystem::path& filepath, ISAMIV_Application& app)
 			: _filepath(filepath), _app(app) {}
 
 private:
