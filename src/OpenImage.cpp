@@ -2,7 +2,8 @@
 
 #include <utility>
 
-OpenImage::OpenImage(std::filesystem::path filepath) : _filepath(std::move(filepath)) {}
+OpenImage::OpenImage(std::filesystem::path filepath) : _filepath(std::move(filepath)) {
+}
 
 void OpenImage::LoadImage() {
 	//start timing

@@ -12,7 +12,7 @@ int main(const int argc, const char* argv[]) {
 
 	if (ISAMIV_Application app(filepath);
 		app.Construct(1280, 710, 1, 1,
-		               false, true, true, true))
+		              false, true, true, true))
 		app.Start();
 	return 0;
 }
