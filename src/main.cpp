@@ -1,6 +1,6 @@
 #include "Application.h"
 
-int main(int argc, char* argv[]) {
+int main(const int argc, const char* argv[]) {
 	std::filesystem::path filepath;
 	if (argc > 1) {
 		filepath = argv[1];
@@ -10,9 +10,9 @@ int main(int argc, char* argv[]) {
 		return 1;
 	}
 
-	ISAMIV_Application demo(filepath);
-	if (demo.Construct(1280, 710, 1, 1,
-					   false, true, true, true))
-		demo.Start();
+	if (ISAMIV_Application app(filepath);
+		app.Construct(1280, 710, 1, 1,
+		               false, true, true, true))
+		app.Start();
 	return 0;
 }

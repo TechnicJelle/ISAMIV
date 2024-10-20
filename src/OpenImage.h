@@ -2,7 +2,6 @@
 
 #include <filesystem>
 #include "olcPixelGameEngine.h"
-#include "interfaces/loader.h"
 #include "loaders/stb/stb_loader.h"
 
 class OpenImage {

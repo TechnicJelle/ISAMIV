@@ -10,7 +10,7 @@ void UpdateListener::handleFileAction(efsw::WatchID watchId,
 									  const std::string& dir, const std::string& filename,
 									  efsw::Action action, std::string oldFilename) {
 	using namespace std::filesystem;
-	path changedFilePath = path(dir) / path(filename);
+	const path changedFilePath = path(dir) / path(filename);
 	printf("_filepath: %s | fullPath: %s\n", _filepath.string().c_str(), changedFilePath.string().c_str());
 	if (_filepath == changedFilePath) {
 		printf("Detected file change! Reloading...\n");

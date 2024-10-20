@@ -4,11 +4,11 @@ void ISAMIV_Application::SetupFileWatcher() {
 	const std::filesystem::path& filepath = image.GetFilepath();
 	listener = new UpdateListener(filepath, this);
 
-	std::filesystem::path parentDir = filepath.parent_path();
+	const std::filesystem::path parentDir = filepath.parent_path();
 	printf("Watching folder for changes: %s\n", parentDir.c_str());
 
-	efsw::WatchID watchID = fileWatcher.addWatch(parentDir.string(), listener, false);
-	if (watchID < 0) {
+	if (const efsw::WatchID watchID = fileWatcher.addWatch(parentDir.string(), listener, false);
+		watchID < 0) {
 		printf("Error adding watch! Watch ID: %ld\n", watchID);
 		return;
 	}
@@ -35,8 +35,8 @@ bool ISAMIV_Application::OnUserUpdate(float fElapsedTime) {
 	transformedView.DrawDecal({0, 0}, image.GetRenderable().Decal());
 	transformedView.HandlePanAndZoom(0 /*left mouse button*/);
 
-	DrawCenteredString({float(ScreenWidth()) / 2.0f, float(ScreenHeight()) - 50.0f},
-					   "Hello, world!", olc::WHITE, 2);
+	DrawCenteredString({static_cast<float>(ScreenWidth()) / 2.0f, static_cast<float>(ScreenHeight()) - 50.0f},
+	                   "Hello, world!", olc::WHITE, 2);
 
 	return true;
 }
@@ -45,5 +45,3 @@ bool ISAMIV_Application::OnUserDestroy() {
 	delete listener;
 	return true;
 }
-
-
