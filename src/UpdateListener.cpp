@@ -3,8 +3,8 @@
 #include "UpdateListener.h"
 #include "Application.h"
 
-UpdateListener::UpdateListener(const std::filesystem::path* filepath, OpenImage* parentImage)
-	: _filepath(filepath), _parentImage(parentImage) {
+UpdateListener::UpdateListener(OpenImage* parentImage)
+	: _parentImage(parentImage) {
 }
 
 void UpdateListener::handleFileAction(efsw::WatchID watchId,
@@ -13,7 +13,7 @@ void UpdateListener::handleFileAction(efsw::WatchID watchId,
 	using namespace std::filesystem;
 	// printf("_filepath: %s | fullPath: %s\n", _filepath.string().c_str(), changedFilePath.string().c_str());
 	if (const path changedFilePath = path(dir) / path(filename);
-		*_filepath == changedFilePath) {
+		_parentImage->GetFilepath() == changedFilePath) {
 		printf("Detected file change! Reloading...\n");
 		_parentImage->MarkForReload();
 	}

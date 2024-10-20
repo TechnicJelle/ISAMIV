@@ -3,11 +3,7 @@
 #include <utility>
 
 OpenImage::OpenImage(std::filesystem::path filepath)
-	: _filepath(std::move(filepath)) {
-}
-
-OpenImage::~OpenImage() {
-	delete _listener;
+	: _filepath(std::move(filepath)), _listener(this) {
 }
 
 void OpenImage::LoadImage() {
@@ -23,12 +19,10 @@ void OpenImage::LoadImage() {
 }
 
 void OpenImage::SetupFileWatcher(efsw::FileWatcher& fileWatcher) {
-	_listener = new UpdateListener(&_filepath, this);
-
 	const std::filesystem::path parentDir = _filepath.parent_path();
 	printf("Watching folder for changes: %s\n", parentDir.c_str());
 
-	if (const efsw::WatchID watchID = fileWatcher.addWatch(parentDir.string(), _listener, false);
+	if (const efsw::WatchID watchID = fileWatcher.addWatch(parentDir.string(), &_listener, false);
 		watchID < 0) {
 		printf("Error adding watch! Watch ID: %ld\n", watchID);
 	}
@@ -36,4 +30,16 @@ void OpenImage::SetupFileWatcher(efsw::FileWatcher& fileWatcher) {
 
 void OpenImage::MarkForReload() {
 	_shouldReload = true;
+}
+
+const olc::Renderable& OpenImage::GetRenderable() {
+	if (_shouldReload) {
+		LoadImage();
+		_shouldReload = false;
+	}
+	return _renderable;
+}
+
+const std::filesystem::path& OpenImage::GetFilepath() const {
+	return _filepath;
 }

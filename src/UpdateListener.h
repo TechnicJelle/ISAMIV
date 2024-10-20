@@ -6,11 +6,10 @@ class OpenImage;
 class ISAMIV_Application;
 
 class UpdateListener final : public efsw::FileWatchListener {
-	const std::filesystem::path* _filepath;
 	OpenImage* _parentImage;
 
 public:
-	UpdateListener(const std::filesystem::path* filepath, OpenImage* parentImage);
+	explicit UpdateListener(OpenImage* parentImage);
 
 private:
 	void handleFileAction(efsw::WatchID watchId,
