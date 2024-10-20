@@ -1,9 +1,5 @@
 #include "Application.h"
 
-void ISAMIV_Application::ReloadImage() {
-	image.LoadImage(loader);
-}
-
 void ISAMIV_Application::SetupFileWatcher() {
 	const std::filesystem::path& filepath = image.GetFilepath();
 	listener = new UpdateListener(filepath, this);
@@ -19,13 +15,8 @@ void ISAMIV_Application::SetupFileWatcher() {
 	fileWatcher.watch();
 }
 
-void ISAMIV_Application::MarkForReload() {
-	shouldReload = true;
-}
-
-
 bool ISAMIV_Application::OnUserCreate() {
-	ReloadImage();
+	image.LoadImage();
 	printf("Image size: %d x %d\n", image.GetRenderable().Sprite()->width, image.GetRenderable().Sprite()->height);
 	SetupFileWatcher();
 
@@ -37,12 +28,7 @@ bool ISAMIV_Application::OnUserUpdate(float fElapsedTime) {
 		return false;
 
 	if (GetKey(olc::R).bPressed)
-		MarkForReload();
-
-	if (shouldReload) {
-		ReloadImage();
-		shouldReload = false;
-	}
+		image.MarkForReload();
 
 	Clear(olc::MAGENTA);
 

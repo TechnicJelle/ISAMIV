@@ -5,18 +5,13 @@
 
 #include "olcPixelGameEngine.h"
 #include "UpdateListener.h"
-#include "loaders/stb/stb_loader.h"
 #include "olcPGEX_TransformedView.h"
 #include "OpenImage.h"
 
 class ISAMIV_Application : public olc::PixelGameEngine {
 
 private:
-	OpenImage image;
 	olc::TransformedView transformedView;
-	ISAMIV_StbLoader loader;
-
-	std::atomic<bool> shouldReload = false;
 
 	efsw::FileWatcher fileWatcher = efsw::FileWatcher();
 	UpdateListener* listener = nullptr;
@@ -26,14 +21,11 @@ public:
 		sAppName = "ISAMIV";
 	}
 
+	OpenImage image;
 private:
-	void ReloadImage();
-
 	void SetupFileWatcher();
 
 public:
-	void MarkForReload();
-
 	bool OnUserCreate() override;
 
 	bool OnUserUpdate(float fElapsedTime) override;

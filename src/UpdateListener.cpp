@@ -14,7 +14,7 @@ void UpdateListener::handleFileAction(efsw::WatchID watchId,
 	printf("_filepath: %s | fullPath: %s\n", _filepath.string().c_str(), changedFilePath.string().c_str());
 	if (_filepath == changedFilePath) {
 		printf("Detected file change! Reloading...\n");
-		_app->MarkForReload();
+		_app->image.MarkForReload();
 	}
 //	switch (action) {
 //		case efsw::Actions::Add:
