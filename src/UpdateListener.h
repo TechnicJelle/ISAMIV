@@ -2,14 +2,15 @@
 
 #include <efsw/efsw.hpp>
 
+class OpenImage;
 class ISAMIV_Application;
 
 class UpdateListener final : public efsw::FileWatchListener {
-	const std::filesystem::path _filepath;
-	ISAMIV_Application* _app;
+	const std::filesystem::path* _filepath;
+	OpenImage* _parentImage;
 
 public:
-	UpdateListener(std::filesystem::path filepath, ISAMIV_Application* app);
+	UpdateListener(const std::filesystem::path* filepath, OpenImage* parentImage);
 
 private:
 	void handleFileAction(efsw::WatchID watchId,

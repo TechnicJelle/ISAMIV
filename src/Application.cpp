@@ -1,24 +1,10 @@
 #include "Application.h"
 
-void ISAMIV_Application::SetupFileWatcher() {
-	const std::filesystem::path& filepath = image.GetFilepath();
-	listener = new UpdateListener(filepath, this);
-
-	const std::filesystem::path parentDir = filepath.parent_path();
-	printf("Watching folder for changes: %s\n", parentDir.c_str());
-
-	if (const efsw::WatchID watchID = fileWatcher.addWatch(parentDir.string(), listener, false);
-		watchID < 0) {
-		printf("Error adding watch! Watch ID: %ld\n", watchID);
-		return;
-	}
-	fileWatcher.watch();
-}
-
 bool ISAMIV_Application::OnUserCreate() {
 	image.LoadImage();
 	printf("Image size: %d x %d\n", image.GetRenderable().Sprite()->width, image.GetRenderable().Sprite()->height);
-	SetupFileWatcher();
+	image.SetupFileWatcher(fileWatcher);
+	fileWatcher.watch();
 
 	return true;
 }
@@ -42,6 +28,8 @@ bool ISAMIV_Application::OnUserUpdate(float fElapsedTime) {
 }
 
 bool ISAMIV_Application::OnUserDestroy() {
-	delete listener;
+	for (const std::string& directory : fileWatcher.directories()) {
+		fileWatcher.removeWatch(directory);
+	}
 	return true;
 }

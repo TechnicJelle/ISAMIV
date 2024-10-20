@@ -9,19 +9,14 @@
 
 class ISAMIV_Application final : public olc::PixelGameEngine {
 	olc::TransformedView transformedView;
+	OpenImage image;
 
 	efsw::FileWatcher fileWatcher = efsw::FileWatcher();
-	UpdateListener* listener = nullptr;
 
 public:
 	explicit ISAMIV_Application(std::filesystem::path filepath) : image(std::move(filepath)) {
 		sAppName = "ISAMIV";
 	}
-
-	OpenImage image;
-
-private:
-	void SetupFileWatcher();
 
 public:
 	bool OnUserCreate() override;
