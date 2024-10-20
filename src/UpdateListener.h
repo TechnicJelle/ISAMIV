@@ -7,16 +7,14 @@ class ISAMIV_Application;
 class UpdateListener : public efsw::FileWatchListener {
 
 private:
-	const std::filesystem::path& _filepath;
-	ISAMIV_Application& _app;
+	const std::filesystem::path _filepath;
+	ISAMIV_Application* _app;
 
 public:
-	UpdateListener(const std::filesystem::path& filepath, ISAMIV_Application& app)
-			: _filepath(filepath), _app(app) {}
+	UpdateListener(std::filesystem::path filepath, ISAMIV_Application* app);
 
 private:
-	void handleFileAction(efsw::WatchID watchId, const std::string& dir,
-						  const std::string& filename, efsw::Action action,
-						  std::string oldFilename) override;
-
+	void handleFileAction(efsw::WatchID watchId,
+						  const std::string& dir, const std::string& filename,
+						  efsw::Action action, std::string oldFilename) override;
 };

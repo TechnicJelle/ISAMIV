@@ -1,25 +1,17 @@
 #include "Application.h"
 
 void ISAMIV_Application::ReloadImage() {
-	//start timing
-	auto start = std::chrono::high_resolution_clock::now();
-
-	img = loader.LoadImage(filepath);
-
-	//end timing
-	auto end = std::chrono::high_resolution_clock::now();
-	auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
-	printf("Image load time: %ld microseconds\n", duration.count());
+	image.LoadImage(loader);
 }
 
 void ISAMIV_Application::SetupFileWatcher() {
-	listener = new UpdateListener(filepath, *this);
+	const std::filesystem::path& filepath = image.GetFilepath();
+	listener = new UpdateListener(filepath, this);
 
-	std::filesystem::path path = filepath;
-	std::filesystem::path parentDir = path.parent_path();
+	std::filesystem::path parentDir = filepath.parent_path();
 	printf("Watching folder for changes: %s\n", parentDir.c_str());
 
-	efsw::WatchID watchID = fileWatcher.addWatch(parentDir, listener, true);
+	efsw::WatchID watchID = fileWatcher.addWatch(parentDir, listener, false);
 	if (watchID < 0) {
 		printf("Error adding watch! Watch ID: %ld\n", watchID);
 		return;
@@ -34,7 +26,7 @@ void ISAMIV_Application::MarkForReload() {
 
 bool ISAMIV_Application::OnUserCreate() {
 	ReloadImage();
-	printf("Image size: %d x %d\n", img.Sprite()->width, img.Sprite()->height);
+	printf("Image size: %d x %d\n", image.GetRenderable().Sprite()->width, image.GetRenderable().Sprite()->height);
 	SetupFileWatcher();
 
 	return true;
@@ -54,7 +46,7 @@ bool ISAMIV_Application::OnUserUpdate(float fElapsedTime) {
 
 	Clear(olc::MAGENTA);
 
-	transformedView.DrawDecal({0, 0}, img.Decal());
+	transformedView.DrawDecal({0, 0}, image.GetRenderable().Decal());
 	transformedView.HandlePanAndZoom(0 /*left mouse button*/);
 
 	DrawCenteredString({float(ScreenWidth()) / 2.0f, float(ScreenHeight()) - 50.0f},

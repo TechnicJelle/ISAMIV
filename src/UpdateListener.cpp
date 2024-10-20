@@ -3,15 +3,18 @@
 #include "UpdateListener.h"
 #include "Application.h"
 
+UpdateListener::UpdateListener(const std::filesystem::path filepath, ISAMIV_Application* app)
+		: _filepath(filepath), _app(app) {}
+
 void UpdateListener::handleFileAction(efsw::WatchID watchId,
 									  const std::string& dir, const std::string& filename,
 									  efsw::Action action, std::string oldFilename) {
 	using namespace std::filesystem;
 	path changedFilePath = path(dir) / path(filename);
-//	printf("_filepath: %s | fullPath: %s\n", _filepath.c_str(), changedFilePath.c_str());
+	printf("_filepath: %s | fullPath: %s\n", _filepath.c_str(), changedFilePath.c_str());
 	if (_filepath == changedFilePath) {
 		printf("Detected file change! Reloading...\n");
-		_app.MarkForReload();
+		_app->MarkForReload();
 	}
 //	switch (action) {
 //		case efsw::Actions::Add:

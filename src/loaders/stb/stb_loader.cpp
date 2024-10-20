@@ -2,7 +2,7 @@
 
 #include "stb_image.h"
 
-olc::Renderable ISAMIV_StbLoader::LoadImage(const std::filesystem::path& filepath) {
+olc::Renderable ISAMIV_StbLoader::LoadImage(const std::filesystem::path& filepath) const {
 	const int channels = 4;
 	int width, height;
 	unsigned char* data;

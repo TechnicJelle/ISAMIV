@@ -1,16 +1,18 @@
 #pragma once
 
 
+#include <utility>
+
 #include "olcPixelGameEngine.h"
 #include "UpdateListener.h"
 #include "loaders/stb/stb_loader.h"
 #include "olcPGEX_TransformedView.h"
+#include "OpenImage.h"
 
 class ISAMIV_Application : public olc::PixelGameEngine {
 
 private:
-	std::filesystem::path filepath;
-	olc::Renderable img;
+	OpenImage image;
 	olc::TransformedView transformedView;
 	ISAMIV_StbLoader loader;
 
@@ -20,18 +22,22 @@ private:
 	UpdateListener* listener = nullptr;
 
 public:
-	explicit ISAMIV_Application(std::filesystem::path filepath) : filepath(std::move(filepath)) {
+	explicit ISAMIV_Application(std::filesystem::path filepath) : image(filepath) {
 		sAppName = "ISAMIV";
 	}
 
 private:
 	void ReloadImage();
+
 	void SetupFileWatcher();
 
 public:
 	void MarkForReload();
+
 	bool OnUserCreate() override;
+
 	bool OnUserUpdate(float fElapsedTime) override;
+
 	bool OnUserDestroy() override;
 
 public:
