@@ -8,13 +8,13 @@
 #include "OpenImage.h"
 
 class ISAMIV_Application final : public olc::PixelGameEngine {
-	olc::TransformedView transformedView;
-	OpenImage image;
+	olc::TransformedView _transformedView;
+	OpenImage _openImage;
 
-	efsw::FileWatcher fileWatcher = efsw::FileWatcher();
+	efsw::FileWatcher _fileWatcher = efsw::FileWatcher();
 
 public:
-	explicit ISAMIV_Application(std::filesystem::path filepath) : image(std::move(filepath)) {
+	explicit ISAMIV_Application(std::filesystem::path filepath) : _openImage(std::move(filepath)) {
 		sAppName = "ISAMIV";
 	}
 
@@ -23,9 +23,9 @@ private:
 		//TODO: Only remove the watch if the directory of the new Open Image is different from the previous one
 
 		// fileWatcher.removeWatch(image.GetFilepath().parent_path().string());
-		for (const std::string& directory : fileWatcher.directories()) {
+		for (const std::string& directory : _fileWatcher.directories()) {
 			printf("Removing watch on %s\n", directory.c_str());
-			fileWatcher.removeWatch(directory);
+			_fileWatcher.removeWatch(directory);
 		}
 	}
 
