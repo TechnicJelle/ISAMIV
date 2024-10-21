@@ -4,7 +4,7 @@ int main(const int argc, const char* argv[]) {
 	std::filesystem::path filepath;
 	if (argc > 1) {
 		filepath = argv[1];
-		printf("File: %s\n", filepath.c_str());
+		printf("Start File: %s\n", filepath.c_str());
 	} else {
 		printf("Usage: %s <image file>\n", argv[0]);
 		return 1;
