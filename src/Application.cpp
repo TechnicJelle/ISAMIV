@@ -1,5 +1,20 @@
 #include "Application.h"
 
+ISAMIV_Application::ISAMIV_Application(std::filesystem::path filepath)
+	: _openImage(std::move(filepath)) {
+	sAppName = "ISAMIV";
+}
+
+void ISAMIV_Application::ClearFileWatcher() {
+	//TODO: Only remove the watch if the directory of the new Open Image is different from the previous one
+
+	// fileWatcher.removeWatch(image.GetFilepath().parent_path().string());
+	for (const std::string& directory : _fileWatcher.directories()) {
+		printf("Removing watch on %s\n", directory.c_str());
+		_fileWatcher.removeWatch(directory);
+	}
+}
+
 bool ISAMIV_Application::OnUserCreate() {
 	_openImage.LoadImage();
 	printf("Image size: %d x %d\n", _openImage.GetRenderable().Sprite()->width, _openImage.GetRenderable().Sprite()->height);

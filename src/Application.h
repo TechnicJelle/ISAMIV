@@ -1,7 +1,5 @@
 #pragma once
 
-#include <utility>
-
 #include "olcPixelGameEngine.h"
 #include "UpdateListener.h"
 #include "olcPGEX_TransformedView.h"
@@ -14,20 +12,10 @@ class ISAMIV_Application final : public olc::PixelGameEngine {
 	efsw::FileWatcher _fileWatcher = efsw::FileWatcher();
 
 public:
-	explicit ISAMIV_Application(std::filesystem::path filepath) : _openImage(std::move(filepath)) {
-		sAppName = "ISAMIV";
-	}
+	explicit ISAMIV_Application(std::filesystem::path filepath);
 
 private:
-	void ClearFileWatcher() {
-		//TODO: Only remove the watch if the directory of the new Open Image is different from the previous one
-
-		// fileWatcher.removeWatch(image.GetFilepath().parent_path().string());
-		for (const std::string& directory : _fileWatcher.directories()) {
-			printf("Removing watch on %s\n", directory.c_str());
-			_fileWatcher.removeWatch(directory);
-		}
-	}
+	void ClearFileWatcher();
 
 public:
 	bool OnUserCreate() override;
