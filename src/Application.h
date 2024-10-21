@@ -1,21 +1,19 @@
 #pragma once
 
 #include "olcPixelGameEngine.h"
-#include "UpdateListener.h"
 #include "olcPGEX_TransformedView.h"
-#include "OpenImage.h"
+#include "OpenDirectory.h"
+#include "FileTypeRegistry.h"
 
 class ISAMIV_Application final : public olc::PixelGameEngine {
-	olc::TransformedView _transformedView;
-	OpenImage _openImage;
+	FileTypeRegistry _fileTypeRegistry;
 
-	efsw::FileWatcher _fileWatcher = efsw::FileWatcher();
+	olc::TransformedView _transformedView;
+
+	OpenDirectory _openDirectory;
 
 public:
 	explicit ISAMIV_Application(std::filesystem::path filepath);
-
-private:
-	void ClearFileWatcher();
 
 public:
 	bool OnUserCreate() override;
@@ -25,13 +23,10 @@ public:
 	bool OnUserDestroy() override;
 
 public:
-	void DrawCenteredString(const olc::vf2d pos, const std::string& text, const olc::Pixel& colour = olc::WHITE, const int scale = 1) {
-		const olc::vi2d size = GetTextSize(text) * scale;
-		DrawString(pos - size / 2, text, colour, scale);
-	}
+	void DrawCenteredString(const olc::vf2d& pos, const std::string& text, const olc::Pixel& colour = olc::WHITE, int scale = 1);
 
-	void DrawCenteredDecal(const olc::vf2d pos, olc::Decal* decal) {
-		const olc::vi2d size = {decal->sprite->width, decal->sprite->height};
-		DrawDecal(pos - size / 2, decal);
-	}
+	void DrawCenteredDecal(const olc::vf2d& pos, olc::Decal* decal);
+
+public:
+	const FileTypeRegistry& GetFileTypeRegistry() const;
 };

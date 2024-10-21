@@ -2,16 +2,13 @@
 
 #include <utility>
 
-OpenImage::OpenImage(std::filesystem::path filepath)
-	: _filepath(std::move(filepath)), _listener(this) {
-	printf("OpenImage constructor %s\n", _filepath.c_str());
+void OpenImage::InitFilePath(const std::filesystem::path& initialFilepath) {
+	_filepath = initialFilepath;
 }
 
-OpenImage::~OpenImage() {
-	printf("OpenImage destructor %s\n", _filepath.c_str());
-}
+void OpenImage::LoadImage(const std::filesystem::path& filepath) {
+	_filepath = filepath;
 
-void OpenImage::LoadImage() {
 	//start timing
 	const auto start = std::chrono::high_resolution_clock::now();
 
@@ -23,23 +20,13 @@ void OpenImage::LoadImage() {
 	printf("Image load time: %ld microseconds\n", duration.count());
 }
 
-void OpenImage::SetupFileWatcher(efsw::FileWatcher& fileWatcher) {
-	const std::filesystem::path parentDir = _filepath.parent_path();
-	printf("Watching folder for changes: %s\n", parentDir.c_str());
-
-	if (const efsw::WatchID watchID = fileWatcher.addWatch(parentDir.string(), &_listener, false);
-		watchID < 0) {
-		printf("Error adding watch! Watch ID: %ld\n", watchID);
-	}
-}
-
 void OpenImage::MarkForReload() {
 	_shouldReload = true;
 }
 
 const olc::Renderable& OpenImage::GetRenderable() {
 	if (_shouldReload) {
-		LoadImage();
+		LoadImage(_filepath);
 		_shouldReload = false;
 	}
 	return _renderable;
