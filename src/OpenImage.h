@@ -22,6 +22,10 @@ public:
 	OpenImage& operator=(OpenImage&& other) noexcept {
 		if (this != &other) {
 			_filepath = std::move(other._filepath);
+			_renderable = std::move(other._renderable);
+			_loader = std::move(other._loader);
+			_listener = std::move(other._listener);
+			_shouldReload = other._shouldReload.load();
 		}
 		return *this;
 	}
