@@ -12,8 +12,14 @@ class ISAMIV_Application final : public olc::PixelGameEngine {
 
 	OpenDirectory _openDirectory;
 
+	float _timeSinceScrollStart = 0.0f;
+	float _timeSinceLastGoTo = -0.5f;
+
 public:
 	explicit ISAMIV_Application(std::filesystem::path filepath);
+
+private:
+	void HandleImagePrevNext(float fElapsedTime);
 
 public:
 	bool OnUserCreate() override;

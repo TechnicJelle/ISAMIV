@@ -9,6 +9,42 @@ bool ISAMIV_Application::OnUserCreate() {
 	return true;
 }
 
+void ISAMIV_Application::HandleImagePrevNext(const float fElapsedTime) {
+	// Handle a single press
+	if (GetKey(olc::RIGHT).bPressed)
+		_openDirectory.NextFile();
+
+	if (GetKey(olc::LEFT).bPressed)
+		_openDirectory.PreviousFile();
+
+	// When holding the key down, scroll through images fast
+	//  (But only after half a second of holding down, to make sure the user really wants to fast scroll)
+	if (GetKey(olc::RIGHT).bHeld || GetKey(olc::LEFT).bHeld) {
+		_timeSinceScrollStart += fElapsedTime;
+		_timeSinceLastGoTo += fElapsedTime;
+	}
+
+	if (GetKey(olc::RIGHT).bReleased || GetKey(olc::LEFT).bReleased) {
+		_timeSinceScrollStart = 0.0f;
+		_timeSinceLastGoTo = -0.5f; //to make up for the .5s of waiting before fast scrolling
+	}
+
+	if (_timeSinceScrollStart > 0.5f) {
+		constexpr int targetFPS = 24; //TODO: Expose this as a setting
+		constexpr float targetFPSSeconds = 1.0f / targetFPS;
+
+		if (_timeSinceLastGoTo > targetFPSSeconds) {
+			_timeSinceLastGoTo -= targetFPSSeconds;
+
+			if (GetKey(olc::RIGHT).bHeld)
+				_openDirectory.NextFile();
+
+			if (GetKey(olc::LEFT).bHeld)
+				_openDirectory.PreviousFile();
+		}
+	}
+}
+
 bool ISAMIV_Application::OnUserUpdate(float fElapsedTime) {
 	if (GetKey(olc::ESCAPE).bPressed || GetKey(olc::Q).bPressed)
 		return false;
@@ -16,12 +52,7 @@ bool ISAMIV_Application::OnUserUpdate(float fElapsedTime) {
 	if (GetKey(olc::R).bPressed)
 		_openDirectory.GetCurrentOpenImage().MarkForReload();
 
-	//TODO: When held, keep going to the next image
-	if (GetKey(olc::RIGHT).bPressed)
-		_openDirectory.NextFile();
-
-	if (GetKey(olc::LEFT).bPressed)
-		_openDirectory.PreviousFile();
+	HandleImagePrevNext(fElapsedTime);
 
 	Clear(olc::MAGENTA);
 
