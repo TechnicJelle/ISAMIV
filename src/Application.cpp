@@ -1,8 +1,15 @@
 #include "Application.h"
 
 ISAMIV_Application::ISAMIV_Application(std::filesystem::path filepath)
-	: _openDirectory(this, std::move(filepath)) {
+	: _openDirectory(this, std::move(filepath)),
+	  _fileWatcherEventHandler(&_openDirectory) {
 	sAppName = "ISAMIV";
+
+	const efsw::WatchID watchID = _fileWatcher.addWatch(_openDirectory.GetDirectoryPath().string(), &_fileWatcherEventHandler);
+	if (watchID < 0) {
+		printf("Error adding watch! Watch ID: %ld\n", watchID);
+	}
+	_fileWatcher.watch();
 }
 
 bool ISAMIV_Application::OnUserCreate() {

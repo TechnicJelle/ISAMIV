@@ -1,9 +1,12 @@
 #pragma once
 
+#include <efsw/efsw.hpp>
+
 #include "olcPixelGameEngine.h"
 #include "olcPGEX_TransformedView.h"
 #include "OpenDirectory.h"
 #include "FileTypeRegistry.h"
+#include "FileWatcherEventHandler.h"
 
 class ISAMIV_Application final : public olc::PixelGameEngine {
 	FileTypeRegistry _fileTypeRegistry;
@@ -11,6 +14,9 @@ class ISAMIV_Application final : public olc::PixelGameEngine {
 	olc::TransformedView _transformedView;
 
 	OpenDirectory _openDirectory;
+
+	efsw::FileWatcher _fileWatcher;
+	FileWatcherEventHandler _fileWatcherEventHandler;
 
 	float _timeSinceScrollStart = 0.0f;
 	float _timeSinceLastGoTo = -0.5f;
