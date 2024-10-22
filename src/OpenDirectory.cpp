@@ -17,13 +17,20 @@ OpenDirectory::OpenDirectory(const ISAMIV_Application* application, std::filesys
 			if (const std::string extension = entry.path().extension().string();
 				application->GetFileTypeRegistry().IsSupported(extension)) {
 				_files.push_back(entry.path());
-				if (entry == openPath) {
-					_currentFileIndex = _files.size() - 1;
-					_currentOpenImage.InitFilePath(entry);
-				}
 			}
 		}
 	}
+
+	std::ranges::sort(_files);
+
+	//find index of open file
+	for (size_t i = 0; i < _files.size(); ++i) {
+		if (_files[i] == openPath) {
+			_currentFileIndex = i;
+			break;
+		}
+	}
+	_currentOpenImage.InitFilePath(_files[_currentFileIndex]);
 }
 
 void OpenDirectory::GoToRelativeFile(const int relativeIndex) {
