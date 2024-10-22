@@ -27,7 +27,7 @@ OpenDirectory::OpenDirectory(const ISAMIV_Application* application, std::filesys
 }
 
 void OpenDirectory::GoToRelativeFile(const int relativeIndex) {
-	_currentFileIndex = (_currentFileIndex + relativeIndex) % _files.size();
+	_currentFileIndex = (_currentFileIndex + relativeIndex + _files.size()) % _files.size();
 	_currentOpenImage.LoadImage(_files[_currentFileIndex]);
 }
 
