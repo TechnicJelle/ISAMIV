@@ -1,32 +1,17 @@
 #pragma once
 
-#include <unordered_set>
 #include <string>
-// #include <unordered_map>
-// #include <concepts>
+#include <unordered_map>
 
-// #include "Application.h"
-// #include "interfaces/loader.h"
-// #include "loaders/stb/stb_loader.h"
-
-// template<typename T>
-// concept IsAnImageLoader = requires(T a)
-// {
-// 	requires std::derived_from<T, ISAMIV_ImageLoader>;
-// };
+#include "loaders/stb/stb_loader.h"
+#include "loaders/qoi/qoi_loader.h"
 
 class FileTypeRegistry {
-	//TODO: all this...
+private:
+	ISAMIV_StbLoader _stb_loader;
+	ISAMIV_QoiLoader _qoi_loader;
 
-	// template<IsAnImageLoader T>
-	// std::unordered_map<std::string, T> _fileTypeRegistry{
-	// 	".png", ISAMIV_StbLoader(),
-	// 	".jpg", ISAMIV_StbLoader(),
-	// 	".jpeg", ISAMIV_StbLoader(),
-	// 	".jpeg", olc::PixelGameEngine(), //this should not be possible
-	// };
-
-	std::unordered_set<std::string> _supportedFileExtensions;
+	std::unordered_map<std::string, ISAMIV_ImageLoader*> _fileTypeRegistry;
 
 public:
 	FileTypeRegistry();
@@ -34,5 +19,5 @@ public:
 public:
 	[[nodiscard]] bool IsSupported(const std::string& extension) const;
 
-	// [[nodiscard]] ISAMIV_ImageLoader& GetLoader(const std::string& extension);
+	[[nodiscard]] ISAMIV_ImageLoader* GetLoader(const std::string& extension);
 };

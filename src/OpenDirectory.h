@@ -15,7 +15,7 @@ class OpenDirectory {
 	OpenImage _currentOpenImage;
 
 public:
-	OpenDirectory(const ISAMIV_Application* application, std::filesystem::path openPath);
+	OpenDirectory(ISAMIV_Application* application, std::filesystem::path openPath);
 
 private:
 	void GoToRelativeFile(int relativeIndex);

@@ -2,14 +2,19 @@
 
 #include <filesystem>
 #include "olcPixelGameEngine.h"
-#include "loaders/stb/stb_loader.h"
+
+class ISAMIV_Application;
 
 class OpenImage {
+	ISAMIV_Application* _application = nullptr;
+
 	std::filesystem::path _filepath;
 	olc::Renderable _renderable;
-	ISAMIV_StbLoader _loader;
 
 	std::atomic<bool> _shouldReload = true; //load on first access
+
+public:
+	explicit OpenImage(ISAMIV_Application* application);
 
 public:
 	void InitFilePath(const std::filesystem::path& initialFilepath);

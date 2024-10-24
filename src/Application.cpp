@@ -90,6 +90,6 @@ void ISAMIV_Application::DrawCenteredDecal(const olc::vf2d& pos, olc::Decal* dec
 	DrawDecal(pos - size / 2, decal);
 }
 
-const FileTypeRegistry& ISAMIV_Application::GetFileTypeRegistry() const {
+FileTypeRegistry& ISAMIV_Application::GetFileTypeRegistry() {
 	return _fileTypeRegistry;
 }

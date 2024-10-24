@@ -40,5 +40,5 @@ public:
 	void DrawCenteredDecal(const olc::vf2d& pos, olc::Decal* decal);
 
 public:
-	const FileTypeRegistry& GetFileTypeRegistry() const;
+	FileTypeRegistry& GetFileTypeRegistry();
 };

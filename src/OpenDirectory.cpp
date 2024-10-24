@@ -2,7 +2,8 @@
 
 #include "Application.h"
 
-OpenDirectory::OpenDirectory(const ISAMIV_Application* application, std::filesystem::path openPath) {
+OpenDirectory::OpenDirectory(ISAMIV_Application* application, std::filesystem::path openPath)
+	: _currentOpenImage(application) {
 	using namespace std::filesystem;
 	if (is_directory(openPath)) {
 		_directoryPath = std::move(openPath);
